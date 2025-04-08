@@ -1,11 +1,31 @@
-from chatbot import build_openmeteo_json
+from chatbot import build_openmeteo_json, fetch_weather_data, print_weather_summary
+import json
 
+queries = [
+    "What's the weather in Berlin in the 2025/04/09 measured every 2 hours?",
+    
+]
 
+if __name__ == '__main__':
+    for query in queries:
+        print("\n==============================")
+        print(f" Query: {query}")
+        final_json = build_openmeteo_json(query)
 
-if __name__=='__main__':
+        print("\n Final JSON for OpenMeteo API call:")
+        print(final_json)
 
-    sample_query = "What's the weather in Berlin on 2025-04-01?"
-    final_json = build_openmeteo_json(sample_query)
-    print("Final JSON for OpenMeteo API call:")
-    print(final_json)
+        weather_data = fetch_weather_data(
+            final_json["latitude"],
+            final_json["longitude"],
+            final_json["date_from"],
+            final_json["date_to"],
+            final_json["granularity"]
+        )
 
+        #print_weather_summary(weather_data) #every 12 hours formated output
+
+        #raw json
+
+        print("\n-- Full Raw Weather Data --")
+        print(json.dumps(weather_data, indent=2, ensure_ascii=False))
