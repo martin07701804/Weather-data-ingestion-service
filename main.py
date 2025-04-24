@@ -1,7 +1,13 @@
+import asyncio
+import logging
 from typing import Any, Dict, Optional
 from datetime import datetime, date
+
 import httpx
 from mcp.server.fastmcp import FastMCP
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
 # Initialize the FastMCP server for the "weather" service.
 mcp = FastMCP("weather")
@@ -18,13 +24,16 @@ async def fetch_data(url: str, params: Dict[str, Any]) -> Optional[Dict[str, Any
             response = await client.get(url, params=params, timeout=30.0)
             response.raise_for_status()
             return response.json()
-        except Exception:
-            return None
+        except httpx.HTTPStatusError as e:
+            logging.error(f"HTTP error while fetching data: {e.response.status_code} - {e.response.text}")
+        except Exception as e:
+            logging.error(f"Unexpected error while fetching data: {e}")
+        return None
 
 @mcp.tool()
 async def get_forecast(latitude: float, longitude: float, granularity: int, request_date: Optional[str] = None) -> Dict[str, Any]:
     """
-    Retrieve forecast or historical forecast weather data for the variables asked.
+    Retrieve forecast or historical forecast weather data for the specified variables.
 
     Args:
         latitude: Latitude of the location.
@@ -53,12 +62,17 @@ async def get_forecast(latitude: float, longitude: float, granularity: int, requ
     }
 
     if granularity < 1440:
-        params["hourly"] = "shortwave_radiation,direct_radiation,diffuse_radiation,direct_normal_irradiance," \
-        "global_tilted_irradiance,terrestrial_radiation,shortwave_radiation_instant,direct_radiation_instant," \
-        "diffuse_radiation_instant,direct_normal_irradiance_instant,global_tilted_irradiance_instant," \
-        "terrestrial_radiation_instant,temperature_2m"
+        params["hourly"] = (
+            "shortwave_radiation,direct_radiation,diffuse_radiation,direct_normal_irradiance,"
+            "global_tilted_irradiance,terrestrial_radiation,"
+            "diffuse_radiation_instant,direct_normal_irradiance_instant,global_tilted_irradiance_instant,"
+            "terrestrial_radiation_instant,temperature_2m"
+        )
     else:
-        params["daily"] = "temperature_2m_mean, sunrise, sunset, daylight_duration, sunshine_duration, uv_index_max, shortwave_radiation_sum"
+        params["daily"] = (
+            "temperature_2m_mean,sunrise,sunset,daylight_duration,sunshine_duration,"
+            "uv_index_max,shortwave_radiation_sum"
+        )
 
     if use_historical_forecast and request_date:
         params["start_date"] = request_date
@@ -73,20 +87,18 @@ async def get_forecast(latitude: float, longitude: float, granularity: int, requ
 
     return {"status": "success", "data": data}
 
-
 @mcp.tool()
 async def get_history(latitude: float, longitude: float, start_date: str, end_date: str, granularity: int) -> Dict[str, Any]:
     """
-    Retrieve historical weather data for the variables asked.
+    Retrieve historical weather data for the specified variables.
 
     Args:
         latitude: Latitude of the location.
         longitude: Longitude of the location.
         start_date: History start date in "YYYY-MM-DD" format.
         end_date: History end date in "YYYY-MM-DD" format.
-        granularity: Temporal granularity in minutes.
-                     (e.g., 60 for hourly data, 1440 for daily data)
-    
+        granularity: Temporal granularity in minutes (e.g., 60 for hourly data, 1440 for daily data)
+
     Returns:
         A JSON object with the historical weather data.
     """
@@ -98,23 +110,25 @@ async def get_history(latitude: float, longitude: float, start_date: str, end_da
         "timezone": TIMEZONE
     }
 
-    # Select hourly or daily parameters based on granularity.
     if granularity < 1440:
-        params["hourly"] = "shortwave_radiation,direct_radiation,diffuse_radiation,direct_normal_irradiance," \
-        "global_tilted_irradiance,terrestrial_radiation,shortwave_radiation_instant,direct_radiation_instant," \
-        "diffuse_radiation_instant,direct_normal_irradiance_instant,global_tilted_irradiance_instant," \
-        "terrestrial_radiation_instant,temperature_2m"
-
+        params["hourly"] = (
+            "shortwave_radiation,direct_radiation,diffuse_radiation,direct_normal_irradiance,"
+            "global_tilted_irradiance,terrestrial_radiation,"
+            "diffuse_radiation_instant,direct_normal_irradiance_instant,global_tilted_irradiance_instant,"
+            "terrestrial_radiation_instant,temperature_2m"
+        )
     else:
-        params["daily"] = "temperature_2m_mean, sunrise, sunset, daylight_duration, sunshine_duration"
+        params["daily"] = (
+            "temperature_2m_mean,sunrise,sunset,daylight_duration,sunshine_duration"
+        )
 
     data = await fetch_data(HISTORY_API_BASE, params)
     if data is None:
         return {"status": "error", "message": "Unable to fetch historical data."}
 
-    # Return the historical data as valid JSON.
     return {"status": "success", "data": data}
 
 if __name__ == "__main__":
     # Run the MCP server using stdio transport.
     mcp.run(transport="stdio")
+
