@@ -1,1 +1,1 @@
-.env file needs to ne created with OPENROUTER_API_KEY="" 
+.env file needs to be created with OPENROUTER_API_KEY="" 
