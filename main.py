@@ -1,6 +1,5 @@
-from chatbot import build_openmeteo_json, fetch_weather_data, filter_data_by_granularity, print_weather_summary
+from chatbot import build_openmeteo_json, fetch_weather_data, filter_data_by_granularity
 import json
-import os # To potentially read costs from env vars later
 
 
 
@@ -16,6 +15,7 @@ COST_CURRENCY = "CZK"
 
 
 queries = [
+    "The weather in Pilsen from yesterday to tomorrow",
     "What's the weather in Berlin tomorrow?",
     "How was the weather in Prague from 2024-05-01 to 2024-05-03?",
     "What's the weather like in London today measured every 3 hours?",

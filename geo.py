@@ -1,5 +1,4 @@
 from geopy.geocoders import Nominatim
-import logging # Optional: Use logging for cleaner output
 
 
 def get_coordinates(location_name: str, api_counts: dict):
