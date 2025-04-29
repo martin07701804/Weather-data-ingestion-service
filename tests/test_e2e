@@ -1,0 +1,81 @@
+import runpy
+import sys
+import types
+import pytest
+
+
+def test_end_to_end_flow(monkeypatch, capsys):
+    # Create stub chatbot module with fake functions
+    def fake_build(query, counts):
+        counts['llm'] += 1
+        counts['geocoding'] += 1
+        # Return a fixed JSON structure with coordinates
+        return {
+            'location': 'TestLocation',
+            'date_from': '2025-04-28',
+            'date_to': '2025-04-29',
+            'granularity': 60,
+            'latitude': 10.0,
+            'longitude': 20.0
+        }
+
+    def fake_fetch(lat, lon, date_from, date_to, granularity, counts):
+        counts['meteo_archive'] += 1
+        # Return minimal weather data
+        return {
+            'forecast': {
+                'hourly': {'time': ['2025-04-28T00:00:00Z'], 'temperature_2m': [42]}
+            },
+            'past': {},
+            'api_errors': []
+        }
+
+    def fake_filter(data, granularity):
+        return data
+
+    # Inject stub module before importing main
+    stub_chatbot = types.ModuleType('chatbot')
+    stub_chatbot.build_openmeteo_json = fake_build
+    stub_chatbot.fetch_weather_data = fake_fetch
+    stub_chatbot.filter_data_by_granularity = fake_filter
+    monkeypatch.setitem(sys.modules, 'chatbot', stub_chatbot)
+
+    # Run the main script as __main__ and capture its globals
+    globals_dict = runpy.run_module('main', run_name='__main__', alter_sys=True)
+    output = capsys.readouterr().out
+
+    # Extract the queries list from the executed module
+    queries = globals_dict.get('queries', [])
+    assert queries, "Expected 'queries' to be defined in main module."
+    total_queries = len(queries)
+
+    # Verify that processing messages for first and last query appear
+    assert f"Processing Query 1/{total_queries}" in output
+    assert f"Processing Query {total_queries}/{total_queries}" in output
+
+    # Verify the first query string is printed
+    first_query = queries[0]
+    assert f"Query: {first_query}" in output
+
+    # Verify JSON payload output
+    assert 'Final JSON for API call preparation:' in output
+    assert '"latitude": 10.0' in output
+    assert '"longitude": 20.0' in output
+
+        # Verify cost breakdown entries for the first query
+    assert 'Llm Calls: 1' in output
+    assert '= 0.00500 CZK' in output
+    assert 'Geocoding Calls: 1' in output
+    assert '= 0.00000 CZK' in output
+    assert 'Meteo_archive Calls: 1' in output
+    assert '= 0.02000 CZK' in output
+
+    # Verify overall summary counts and cost counts and cost
+    assert 'Total API Calls:' in output
+    assert f"  Llm: {total_queries}" in output
+    assert f"  Geocoding: {total_queries}" in output
+    assert f"  Meteo_archive: {total_queries}" in output
+    assert f"  Meteo_forecast: 0" in output
+
+    expected_total_cost = total_queries * (0.005 + 0.02)
+    assert f"Total Estimated Cost for All Queries: {expected_total_cost:.5f} CZK" in output
