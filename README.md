@@ -28,8 +28,12 @@ The goal of this project is to provide a service for ingesting weather data, for
 ## Getting Started
 
 These instructions cover setting up and running the Python **server** component. You will also need an **MCP Client** (like Claude Desktop App, Oppy, etc.) configured to use this server. In this case we will use Claude Desktop as a client.
-More MCP clients: https://modelcontextprotocol.io/clients
-How to create a custom client: https://modelcontextprotocol.io/quickstart/client
+
+More MCP clients:
+https://modelcontextprotocol.io/clients
+
+How to create a custom client: 
+https://modelcontextprotocol.io/quickstart/client
 
 ### Prerequisites
 
@@ -118,6 +122,10 @@ This script is designed to run as a persistent server process that communicates 
    ```bash
    uv run server.py
    ```
+
+   Expected output:
+
+   `2025-05-02 12:51:59,150 [INFO] __main__: Starting MCP server...`
 
 3. **Restart Claude Desktop if neccesary.**
    You may have to open it as an administrator
