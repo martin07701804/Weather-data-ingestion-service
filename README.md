@@ -1,4 +1,17 @@
-# Weather-data-ingestion-service
+# Weather-data-ingestion-service  
+
+
+
+## Table of Contents
+1. [Project Description](#project-description)  
+2. [Key Features](#key-features)  
+3. [Getting started](#getting-started)  
+4. [Installation](#installation)   
+5. [Run the Server](#run-the-server)  
+6. [Available Tools](#available-tools)  
+
+
+
 
 ## Project Description
 
@@ -33,7 +46,7 @@ You can find this version in the `no_MCP_version` branch:
 
 *(Note: The setup and usage instructions in that branch's README differ from this one.)*
 
-### Installation
+## Installation
 
 1.  **Clone the repository:**
    ```bash
@@ -95,7 +108,7 @@ You can find this version in the `no_MCP_version` branch:
    ```bash
    mcp install server.py
    ```
-### Run the server
+## Run the server
 
 This script is designed to run as a persistent server process that communicates over standard input/output (`stdio`).
 
@@ -118,6 +131,8 @@ This script is designed to run as a persistent server process that communicates 
 
 
 ### Configurate `.env` file if you need to use an Open Meteo or Geopy API key
+
+Rigth now the code only works with the free API usage for both services.
 
 
 
