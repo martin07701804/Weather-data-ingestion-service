@@ -5,7 +5,7 @@
 This project provides a standalone Python tool that interprets natural language weather queries. It uses a Large Language Model (LLM) via OpenRouter.ai to parse the query into structured parameters, fetches corresponding weather data (forecasts and history) from Open-Meteo APIs, performs geocoding using Nominatim/OpenStreetMap, filters the data to the requested granularity, and outputs the results.
 
 **This version does NOT include the Model Context Protocol (MCP) server components.** It is intended for direct script execution or integration into other Python projects. 
-**For the version designed as an MCP Tool Provider for AI agent integration, please see the [main](https://github.com/martin07701804/Weather-data-ingestion-service/tree/final-MCP-main-version) branch.
+**For the version designed as an MCP Tool Provider for AI agent integration, please see the [main](https://github.com/martin07701804/Weather-data-ingestion-service/tree/final-MCP-main-version) branch.**
 
 ## Key Features
 
@@ -33,22 +33,7 @@ This project provides a standalone Python tool that interprets natural language 
     git checkout no_MCP_version
     ```
 
-2.  **Create and activate a virtual environment:**
-    ```bash
-    # Create the virtual environment
-    python -m venv .venv
-
-    # Activate on Linux/macOS
-    source .venv/bin/activate
-
-    # Activate on Windows (Command Prompt)
-    # .venv\Scripts\activate.bat
-
-    # Activate on Windows (PowerShell)
-    # .venv\Scripts\Activate.ps1
-    ```
-
-3.  **Install dependencies:**
+2.  **Install dependencies:**
     (Ensure your virtual environment is activated first)
     ```bash
     pip install -r requirements.txt
