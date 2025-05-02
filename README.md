@@ -66,7 +66,7 @@ You can find this version in the `no_MCP_version` branch:
 
 7. **Install dependencies:**
    ```bash
-   uv pip sync requirements.txt
+   uv add -r requirements.txt
    ```
 
 ### Claude Desktop configuration (or other client)
