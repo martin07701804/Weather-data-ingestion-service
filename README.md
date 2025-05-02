@@ -14,7 +14,9 @@ The goal of this project is to provide a service for ingesting weather data, for
 
 ## Getting Started
 
-These instructions cover setting up and running the Python **server** component. You will also need an **MCP Client** (like Claude Desktop App, Oppy, etc.) configured to use this server.
+These instructions cover setting up and running the Python **server** component. You will also need an **MCP Client** (like Claude Desktop App, Oppy, etc.) configured to use this server. In this case we will use Claude Desktop as a client.
+More MCP clients: https://modelcontextprotocol.io/clients
+How to create a custom client: https://modelcontextprotocol.io/quickstart/client
 
 ### Prerequisites
 
@@ -37,31 +39,73 @@ You can find this version in the `no_MCP_version` branch:
     git clone https://github.com/martin07701804/Weather-data-ingestion-service.git
     cd Weather-data-ingestion-service
 
-2.  **Install dependencies:**
-    pip install -r requirements.txt
+2.  **Install uv (recomendation):**
+    powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 
-### Configuration (`.env` file)
+3. **Create a virtual enviroment and activate it:**
+    uv venv
+    .venv\Scripts\activate
 
-Edit the `.env` file with your actual values. **Do not commit the `.env` file to Git.** (Ensure `.env` is listed in your `.gitignore` file). The provided code uses `python-dotenv` which automatically loads variables from this file if it exists.
+4. **Install dependencies:**
+   uv pip sync requirements.txt
 
-### Running the Server
+### Claude Desktop configuration (or other client)
+
+1. **Install Claude Desktop:**
+   Here: https://claude.ai/download
+2. **Activate developer tools and go to settings:**
+   On the upper left menu.
+   ![image](https://github.com/user-attachments/assets/05e5c5e3-7f48-4c0e-b119-3b188c4d517b)
+   ![image](https://github.com/user-attachments/assets/62a813ee-d9e5-4c9a-b2c2-b2e8ea40295f)
+
+3. **Create and edit config file:**
+   Click on edit config to create it on Windows: %APPDATA%\Claude\claude_desktop_config.json
+   
+   Replace the content with this:
+
+    {
+      "mcpServers": {
+        "weather": {
+          "command": "uv",
+          "args": [
+            "run",
+            "--with",
+            "mcp[cli]",
+            "mcp",
+            "run",
+            "ABSOLUTE_PATH_TO_server.py"
+          ]
+        }
+      }
+    }
+
+   Or use the command:
+   mcp install server.py
+
+### Run the server
 
 This script is designed to run as a persistent server process that communicates over standard input/output (`stdio`).
 
-**Run the main server script:**
+1. **Use the command:**
+   uv run server.py
 
-    python src/main.py
+2. **Restart Claude Desktop if neccesary.**
+   You may have to open it as an administrator
+3. **Verify startup:**
+   Now this icon must appear on Claude Desktop:
+   ![image](https://github.com/user-attachments/assets/c7ac546a-65ca-4b3c-95ee-05430ceae3d6)
 
-*   The script will start and wait for JSON-based requests conforming to the Model Context Protocol on its standard input.
-*   It will send JSON responses back via its standard output.
-*   It will keep running until interrupted (e.g., Ctrl+C) or terminated by the parent process (the MCP client).
 
-### Connecting an MCP Client
 
-  This server **does nothing on its own**. It needs an MCP client to send it tool requests.
-  Guide of how to use the mcp: https://modelcontextprotocol.io/quickstart/server#claude-for-desktop-integration-issues
-  Possible pre-made MCP clients: https://modelcontextprotocol.io/clients
-  
+
+    
+
+
+### Configurate `.env` file if you need to use an Open Meteo or Geopy API key
+
+
+
+
 ## Available Tools
 
 *   **`get_forecast`**: Retrieves future weather forecasts and recent past weather data. Requires location (`place` or `latitude`/`longitude`) and accepts parameters for granularity, forecast/past days, and specific variables. See the docstring in the code for detailed usage.
