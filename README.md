@@ -34,7 +34,6 @@ This project provides a standalone Python tool that interprets natural language 
     ```
 
 2.  **Install dependencies:**
-    (Ensure your virtual environment is activated first)
     ```bash
     pip install -r requirements.txt
     ```
