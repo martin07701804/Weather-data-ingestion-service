@@ -1,0 +1,17 @@
+# MCP Server library
+mcp-fastapi-server>=0.1.0 
+
+# HTTP client for API calls
+httpx[http2]>=0.25.0
+
+# Geocoding library
+geopy>=2.3.0
+
+# Async adapter for geopy
+aiohttp>=3.8.0 # Often needed by geopy's AioHTTPAdapter
+
+# Data validation
+pydantic>=2.0.0
+
+# Environment variable management
+python-dotenv>=1.0.0
