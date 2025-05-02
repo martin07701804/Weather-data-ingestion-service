@@ -74,7 +74,7 @@ You can find this version in the `no_MCP_version` branch:
    Click on edit config to create it on `Windows: %APPDATA%\Claude\claude_desktop_config.json`
    
    Replace the content with this:
-`
+```JSON
     {
       "mcpServers": {
         "weather": {
@@ -90,22 +90,25 @@ You can find this version in the `no_MCP_version` branch:
         }
       }
     }
-`
+```
    Or use the command:
-   `
+   ```bash
    mcp install server.py
-   `
+   ```
 ### Run the server
 
 This script is designed to run as a persistent server process that communicates over standard input/output (`stdio`).
 
 1. **Use the command:**
+   ```bash
    uv run server.py
+   ```
 
-2. **Restart Claude Desktop if neccesary.**
+3. **Restart Claude Desktop if neccesary.**
    You may have to open it as an administrator
-3. **Verify startup:**
+4. **Verify startup:**
    Now this icon must appear on Claude Desktop:
+   
    ![image](https://github.com/user-attachments/assets/c7ac546a-65ca-4b3c-95ee-05430ceae3d6)
 
 
