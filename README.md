@@ -22,8 +22,46 @@ These instructions cover setting up and running the Python **server** component.
 *   Python (3.9+ recommended)
 *   An MCP Client capable of communicating with tools via `stdio`. (See "Connecting an MCP Client" below).
 
+### Installation
 
-Guide of how to use the mcp: https://modelcontextprotocol.io/quickstart/server#claude-for-desktop-integration-issues
+1.  **Clone the repository:**
+    git clone https://github.com/martin07701804/Weather-data-ingestion-service.git
+    cd Weather-data-ingestion-service
+
+2.  **Install dependencies:**
+    pip install -r requirements.txt
+
+### Configuration (`.env` file)
+
+Edit the `.env` file with your actual values. **Do not commit the `.env` file to Git.** (Ensure `.env` is listed in your `.gitignore` file). The provided code uses `python-dotenv` which automatically loads variables from this file if it exists.
+
+### Running the Server
+
+This script is designed to run as a persistent server process that communicates over standard input/output (`stdio`).
+
+**Run the main server script:**
+
+    python src/main.py
+
+*   The script will start and wait for JSON-based requests conforming to the Model Context Protocol on its standard input.
+*   It will send JSON responses back via its standard output.
+*   It will keep running until interrupted (e.g., Ctrl+C) or terminated by the parent process (the MCP client).
+
+### Connecting an MCP Client
+
+  This server **does nothing on its own**. It needs an MCP client to send it tool requests.
+  Guide of how to use the mcp: https://modelcontextprotocol.io/quickstart/server#claude-for-desktop-integration-issues
+  Possible pre-made MCP clients: https://modelcontextprotocol.io/clients
+  
+## Available Tools
+
+*(Defined in `src/main.py`)*
+
+*   **`get_forecast`**: Retrieves future weather forecasts and recent past weather data. Requires location (`place` or `latitude`/`longitude`) and accepts parameters for granularity, forecast/past days, and specific variables. See the docstring in the code for detailed usage.
+*   **`get_history`**: Retrieves historical archived weather data for specific past dates/ranges. Requires location (`place` or `latitude`/`longitude`), `start_date`, `end_date`, and accepts parameters for granularity and variables. See the docstring in the code for detailed usage.
+
+## Dependency Management
+
+Project dependencies are listed in `requirements.txt`.
 
 
-Possible pre-made MCP clients: https://modelcontextprotocol.io/clients
