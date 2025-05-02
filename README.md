@@ -63,6 +63,8 @@ You can find this version in the `no_MCP_version` branch:
     uv venv
     .venv\Scripts\activate
    ```
+   Make sure a pyproject.toml file has been created.
+
 
 7. **Install dependencies:**
    ```bash
