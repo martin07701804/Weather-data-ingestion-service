@@ -1,5 +1,5 @@
-# MCP Server library
-mcp>=1.1.0 
+# MCP Server library with client extensions
+mcp[cli]==1.7.0 
 
 # HTTP client for API calls
 httpx[http2]>=0.25.0
