@@ -36,33 +36,45 @@ You can find this version in the `no_MCP_version` branch:
 ### Installation
 
 1.  **Clone the repository:**
+   ```bash
     git clone https://github.com/martin07701804/Weather-data-ingestion-service.git
     cd Weather-data-ingestion-service
+   ```
 
-2.  **Install uv (recomendation):**
+3.  **Install uv (recomendation):**
+   ```bash
     powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-
-3. **Create a virtual enviroment and activate it:**
+   ```
+5. **Create a virtual enviroment and activate it:**
+   ```bash
     uv venv
     .venv\Scripts\activate
+   ```
 
-4. **Install dependencies:**
+7. **Install dependencies:**
+   ```bash
    uv pip sync requirements.txt
+   ```
 
 ### Claude Desktop configuration (or other client)
 
 1. **Install Claude Desktop:**
+   
    Here: https://claude.ai/download
-2. **Activate developer tools and go to settings:**
+   
+3. **Activate developer tools and go to settings:**
+   
    On the upper left menu.
+
+   
    ![image](https://github.com/user-attachments/assets/05e5c5e3-7f48-4c0e-b119-3b188c4d517b)
    ![image](https://github.com/user-attachments/assets/62a813ee-d9e5-4c9a-b2c2-b2e8ea40295f)
 
-3. **Create and edit config file:**
-   Click on edit config to create it on Windows: %APPDATA%\Claude\claude_desktop_config.json
+5. **Create and edit config file:**
+   Click on edit config to create it on `Windows: %APPDATA%\Claude\claude_desktop_config.json`
    
    Replace the content with this:
-
+`
     {
       "mcpServers": {
         "weather": {
@@ -78,10 +90,11 @@ You can find this version in the `no_MCP_version` branch:
         }
       }
     }
-
+`
    Or use the command:
+   `
    mcp install server.py
-
+   `
 ### Run the server
 
 This script is designed to run as a persistent server process that communicates over standard input/output (`stdio`).
