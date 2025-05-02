@@ -22,7 +22,7 @@ This project provides a standalone Python tool that interprets natural language 
 ### Prerequisites
 
 *   Git
-*   Python (3.9+ recommended)
+*   Python
 
 ### Installation
 
