@@ -20,7 +20,16 @@ These instructions cover setting up and running the Python **server** component.
 
 *   Git
 *   Python (3.9+ recommended)
-*   An MCP Client capable of communicating with tools via `stdio`. (See "Connecting an MCP Client" below).
+*   An MCP Client capable of communicating with tools via `stdio`. (See "Connecting an MCP Client" below). If you do **not** want to use MCP, please refer to the alternative version mentioned below.
+
+### Alternative (No MCP Version)
+
+If you do not need or want to use the Model Context Protocol (MCP) integration, an alternative version of this project exists without the MCP server components. This version might be suitable for direct scripting or different integration methods.
+
+You can find this version in the `no_MCP_version` branch:
+**[https://github.com/martin07701804/Weather-data-ingestion-service/tree/no_MCP_version](https://github.com/martin07701804/Weather-data-ingestion-service/tree/no_MCP_version)**
+
+*(Note: The setup and usage instructions in that branch's README differ from this one.)*
 
 ### Installation
 
@@ -54,8 +63,6 @@ This script is designed to run as a persistent server process that communicates 
   Possible pre-made MCP clients: https://modelcontextprotocol.io/clients
   
 ## Available Tools
-
-*(Defined in `src/main.py`)*
 
 *   **`get_forecast`**: Retrieves future weather forecasts and recent past weather data. Requires location (`place` or `latitude`/`longitude`) and accepts parameters for granularity, forecast/past days, and specific variables. See the docstring in the code for detailed usage.
 *   **`get_history`**: Retrieves historical archived weather data for specific past dates/ranges. Requires location (`place` or `latitude`/`longitude`), `start_date`, `end_date`, and accepts parameters for granularity and variables. See the docstring in the code for detailed usage.
